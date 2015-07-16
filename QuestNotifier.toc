@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 60200
 ## Title: QuestNotifier
 ## Author: Alexander Neu
 ## Notes: Notifies the player if an item was looted which begins a quest.
