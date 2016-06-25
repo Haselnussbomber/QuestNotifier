@@ -15,7 +15,8 @@ local RaidNotice_AddMessage = RaidNotice_AddMessage
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 local RaidBossEmoteFrame = RaidBossEmoteFrame
 
-local itemCache = {} -- prevents from
+--  serves as exclude list and prevents notifications from repeating
+local questCache = {}
 
 function addon:OnEnable()
 	self:RegisterEvent("BAG_UPDATE", "ITEMS_UPDATED")
@@ -23,25 +24,25 @@ function addon:OnEnable()
 end
 
 local function processBagSlot(bagid, slotid)
-	local isQuestItem, questId, isActive = GetContainerItemQuestInfo(bagid, slotid)
+	local _, questId, isActive = GetContainerItemQuestInfo(bagid, slotid)
 
-	if isActive or not questId then
+	if isActive or not questId or questCache[questId] then
 		return
 	end
 
 	local itemId = GetContainerItemID(bagid, slotid)
 
-	if not itemId or itemCache[itemId] then
+	if not itemId then
 		return
 	end
 
-	local itemName, itemLink, _, itemLevel = GetItemInfo(itemId)
+	local _, itemLink, _, itemLevel = GetItemInfo(itemId)
 
 	print(format(L["%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r"], itemLink, questId, itemLevel));
 	RaidNotice_AddMessage(RaidBossEmoteFrame, format(L["%s begins a quest!"], itemLink), ChatTypeInfo["SYSTEM"], 3)
 	PlaySound("AlarmClockWarning1")
 
-	itemCache[itemId] = true
+	questCache[itemId] = true
 end
 
 local function processBag(bagid)
