@@ -28,7 +28,10 @@ local questCache = {
 	[29458] = true, -- The Captured Journal
 	[29464] = true, -- Tools of Divination
 
-	-- WoD Garrison: Scouting Missives (Horde / Alliance)
+	-- Love is in the Air
+	[14483] = true, [24745] = true, -- Faded Lovely Greeting Card
+
+	-- WoD Garrison: Scouting Missives
 	[38180] = true, [38193] = true, -- Missive: Assault on the Broken Precipice
 	[38182] = true, [38196] = true, -- Missive: Assault on Darktide Roost
 	[38179] = true, [38192] = true, -- Missive: Assault on the Everbloom Wilds
@@ -63,11 +66,11 @@ local function processBagSlot(bagid, slotid)
 
 	local _, itemLink, _, itemLevel = GetItemInfo(itemId)
 
-	print(format(L["%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r"], itemLink, questId, itemLevel));
+	print(format(L["%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r"], itemLink, questId, itemLevel))
 	RaidNotice_AddMessage(RaidBossEmoteFrame, format(L["%s begins a quest!"], itemLink), ChatTypeInfo["SYSTEM"], 3)
 	PlaySound("AlarmClockWarning1")
 
-	questCache[itemId] = true
+	questCache[questId] = true
 end
 
 local function processBag(bagid)
