@@ -1,7 +1,7 @@
-## Interface: 70100
+## Interface: 70300
 ## Title: QuestNotifier
 ## Author: Haselnussbomber
-## Version: 1.1.1
+## Version: 1.1.2
 ## Notes: Notifies the player if an item was looted which begins a quest.
 ## Notes-deDE: Benachrichtigt den Spieler, wenn ein Gegenstand gelootet wurde, welcher eine Quest vergibt.
 ## OptionalDeps: Ace3

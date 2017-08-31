@@ -68,7 +68,7 @@ local function processBagSlot(bagid, slotid)
 
 	print(format(L["%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r"], itemLink, questId, itemLevel))
 	RaidNotice_AddMessage(RaidBossEmoteFrame, format(L["%s begins a quest!"], itemLink), ChatTypeInfo["SYSTEM"], 3)
-	PlaySound("AlarmClockWarning1")
+	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_1)
 
 	questCache[questId] = true
 end
