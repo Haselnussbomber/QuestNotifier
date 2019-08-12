@@ -1,22 +1,7 @@
-## Interface: 70300
+## Interface: 80200
 ## Title: QuestNotifier
 ## Author: Haselnussbomber
-## Version: 1.1.2
+## Version: 1.2.0
 ## Notes: Notifies the player if an item was looted which begins a quest.
-## Notes-deDE: Benachrichtigt den Spieler, wenn ein Gegenstand gelootet wurde, welcher eine Quest vergibt.
-## OptionalDeps: Ace3
-## DefaultState: Enabled
-
-libs/CallbackHandler-1.0/CallbackHandler-1.0.lua
-libs/LibStub/LibStub.lua
-
-#@no-lib-strip@
-libs/AceAddon-3.0/AceAddon-3.0.lua
-libs/AceEvent-3.0/AceEvent-3.0.lua
-libs/AceLocale-3.0/AceLocale-3.0.lua
-#@end-no-lib-strip@
-
-localization\enUS.lua
-localization\deDE.lua
 
 QuestNotifier.lua

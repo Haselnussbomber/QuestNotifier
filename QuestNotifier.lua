@@ -1,9 +1,3 @@
-local addonName, addon = ...
-
-LibStub("AceAddon-3.0"):NewAddon(addon, addonName, "AceEvent-3.0")
-
-local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
-
 local format = string.format
 local GetContainerItemID = GetContainerItemID
 local GetContainerItemQuestInfo = GetContainerItemQuestInfo
@@ -46,47 +40,43 @@ local questCache = {
 	[38176] = true, [38189] = true, -- Missive: Assault on Stonefury Cliffs
 }
 
-function addon:OnEnable()
-	self:RegisterEvent("BAG_UPDATE", "ITEMS_UPDATED")
-	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "ITEMS_UPDATED")
-end
+local function processBagSlot(bagID, slotID)
+	local _, questID, isActive = GetContainerItemQuestInfo(bagID, slotID)
 
-local function processBagSlot(bagid, slotid)
-	local _, questId, isActive = GetContainerItemQuestInfo(bagid, slotid)
-
-	if isActive or not questId or questCache[questId] then
+	if isActive or not questID or questCache[questID] then
 		return
 	end
 
-	local itemId = GetContainerItemID(bagid, slotid)
-
-	if not itemId then
+	local itemID = GetContainerItemID(bagID, slotID)
+	if not itemID then
 		return
 	end
 
-	local _, itemLink, _, itemLevel = GetItemInfo(itemId)
+	local _, itemLink, _, itemLevel = GetItemInfo(itemID)
 
-	print(format(L["%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r"], itemLink, questId, itemLevel))
-	RaidNotice_AddMessage(RaidBossEmoteFrame, format(L["%s begins a quest!"], itemLink), ChatTypeInfo["SYSTEM"], 3)
+	print(format("%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r", itemLink, questID, itemLevel))
+	RaidNotice_AddMessage(RaidBossEmoteFrame, format("%s begins a quest!", itemLink), ChatTypeInfo["SYSTEM"], 3)
 	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_1)
 
-	questCache[questId] = true
+	questCache[questID] = true
 end
 
-local function processBag(bagid)
-	local size = GetContainerNumSlots(bagid)
-
-	if not size then
-		return
-	end
-
-	for slotid = 1, size do
-		processBagSlot(bagid, slotid)
-	end
-end
-
-function addon:ITEMS_UPDATED(...)
-	for bagid = 0, NUM_BAG_SLOTS do
-		processBag(bagid)
+local function processBags()
+	for bagID = 0, NUM_BAG_SLOTS do
+		local size = GetContainerNumSlots(bagID)
+		if size then
+			for slotID = 1, size do
+				processBagSlot(bagID, slotID)
+			end
+		end
 	end
 end
+
+local frame = CreateFrame("Frame", "QuestNotifier")
+frame:RegisterEvent("BAG_UPDATE")
+frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
+frame:SetScript("OnEvent", function(_, event)
+	if event == "BAG_UPDATE" or event == "UNIT_INVENTORY_CHANGED" then
+		processBags()
+	end
+end)
