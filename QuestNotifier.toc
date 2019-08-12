@@ -1,7 +1,7 @@
-## Interface: 80200
+## Interface: 11302
 ## Title: QuestNotifier
 ## Author: Haselnussbomber
-## Version: 1.2.0
+## Version: 1.2.0-classic
 ## Notes: Notifies the player if an item was looted which begins a quest.
 
 QuestNotifier.lua
