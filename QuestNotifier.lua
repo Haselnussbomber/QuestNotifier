@@ -1,7 +1,7 @@
 local format = string.format
 local GetContainerItemID = GetContainerItemID
 local GetContainerNumSlots = GetContainerNumSlots
-local GetItemInfo = GetItemInfo
+local GetContainerItemLink = GetContainerItemLink
 local PlaySound = PlaySound
 local print = print
 local RaidNotice_AddMessage = RaidNotice_AddMessage
@@ -197,9 +197,12 @@ local function processBagSlot(bagID, slotID)
 		return
 	end
 
-	local _, itemLink, _, itemLevel = GetItemInfo(itemID)
+	local itemLink = GetContainerItemLink(bagID, slotID)
+	if not itemLink then
+		return
+	end
 
-	print(format("%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r", itemLink, questID, itemLevel))
+	print(format("%s |cffffff00begins a [Quest]!", itemLink))
 	RaidNotice_AddMessage(RaidBossEmoteFrame, format("%s begins a quest!", itemLink), ChatTypeInfo["SYSTEM"], 3)
 	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_1)
 
@@ -228,6 +231,7 @@ local function updateActiveQuests()
 		end
 	end
 end
+updateActiveQuests()
 
 local frame = CreateFrame("Frame", "QuestNotifier")
 frame:RegisterEvent("BAG_UPDATE")
