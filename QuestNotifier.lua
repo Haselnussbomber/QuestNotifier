@@ -198,7 +198,8 @@ local function processBagSlot(bagID, slotID)
 	end
 
 	local itemLink = GetContainerItemLink(bagID, slotID)
-	if not itemLink then
+	local itemName = itemLink:match("|H.*|h%[(.*)%]|h")
+	if not itemLink or itemName == "" then
 		return
 	end
 
