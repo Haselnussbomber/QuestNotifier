@@ -203,7 +203,7 @@ local function processBagSlot(bagID, slotID)
 		return
 	end
 
-	print(format("%s |cffffff00begins a [Quest]!", itemLink))
+	print(format("%s |cffffff00begins a Quest!", itemLink))
 	RaidNotice_AddMessage(RaidBossEmoteFrame, format("%s begins a quest!", itemLink), ChatTypeInfo["SYSTEM"], 3)
 	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_1)
 
