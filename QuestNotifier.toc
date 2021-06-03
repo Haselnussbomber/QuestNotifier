@@ -1,4 +1,4 @@
-## Interface: 11302
+## Interface: 20501
 ## Title: QuestNotifier
 ## Author: Haselnussbomber
 ## Version: 1.2.0-classic
