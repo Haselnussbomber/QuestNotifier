@@ -1,14 +1,3 @@
-local format = string.format
-local GetContainerItemID = GetContainerItemID
-local GetContainerItemQuestInfo = GetContainerItemQuestInfo
-local GetContainerNumSlots = GetContainerNumSlots
-local GetItemInfo = GetItemInfo
-local PlaySound = PlaySound
-local print = print
-local RaidNotice_AddMessage = RaidNotice_AddMessage
-local NUM_BAG_SLOTS = NUM_BAG_SLOTS
-local RaidBossEmoteFrame = RaidBossEmoteFrame
-
 --  serves as exclude list and prevents notifications from repeating
 local questCache = {
 	-- Darkmoon Faire
@@ -38,45 +27,45 @@ local questCache = {
 	[38186] = true, [38200] = true, -- Missive: Assault on Skettis
 	[38183] = true, [38197] = true, -- Missive: Assault on Socrethar's Rise
 	[38176] = true, [38189] = true, -- Missive: Assault on Stonefury Cliffs
-}
+};
 
 local function processBagSlot(bagID, slotID)
-	local _, questID, isActive = GetContainerItemQuestInfo(bagID, slotID)
+	local questInfo = C_Container.GetContainerItemQuestInfo(bagID, slotID);
 
-	if isActive or not questID or questCache[questID] then
-		return
+	if (questInfo.isActive or not questInfo.questID or questCache[questInfo.questID]) then
+		return;
 	end
 
-	local itemID = GetContainerItemID(bagID, slotID)
-	if not itemID then
-		return
+	local itemID = C_Container.GetContainerItemID(bagID, slotID);
+	if (not itemID) then
+		return;
 	end
 
-	local _, itemLink, _, itemLevel = GetItemInfo(itemID)
+	local _, itemLink, _, itemLevel = GetItemInfo(itemID);
 
-	print(format("%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r", itemLink, questID, itemLevel))
-	RaidNotice_AddMessage(RaidBossEmoteFrame, format("%s begins a quest!", itemLink), ChatTypeInfo["SYSTEM"], 3)
-	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_1)
+	print(("%s |cffffff00begins a |Hquest:%s:%s|h[Quest]|h!|r"):format(itemLink, questInfo.questID, itemLevel));
+	RaidNotice_AddMessage(RaidBossEmoteFrame, ("%s begins a quest!"):format(itemLink), ChatTypeInfo["SYSTEM"], 3);
+	PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_1);
 
-	questCache[questID] = true
+	questCache[questInfo.questID] = true;
 end
 
 local function processBags()
 	for bagID = 0, NUM_BAG_SLOTS do
-		local size = GetContainerNumSlots(bagID)
-		if size then
+		local size = C_Container.GetContainerNumSlots(bagID);
+		if (size) then
 			for slotID = 1, size do
-				processBagSlot(bagID, slotID)
+				processBagSlot(bagID, slotID);
 			end
 		end
 	end
 end
 
-local frame = CreateFrame("Frame", "QuestNotifier")
-frame:RegisterEvent("BAG_UPDATE")
-frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
+local frame = CreateFrame("Frame", "QuestNotifier");
+frame:RegisterEvent("BAG_UPDATE");
+frame:RegisterEvent("UNIT_INVENTORY_CHANGED");
 frame:SetScript("OnEvent", function(_, event)
-	if event == "BAG_UPDATE" or event == "UNIT_INVENTORY_CHANGED" then
-		processBags()
+	if (event == "BAG_UPDATE" or event == "UNIT_INVENTORY_CHANGED") then
+		processBags();
 	end
-end)
+end);
